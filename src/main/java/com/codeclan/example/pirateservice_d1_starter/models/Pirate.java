@@ -1,6 +1,9 @@
 package com.codeclan.example.pirateservice_d1_starter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "pirates")
@@ -20,9 +23,27 @@ public class Pirate {
     @Column(name = "age")
     private int age;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "ship_id", nullable=false)
     private Ship ship;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name = "pirates_raids",
+            joinColumns = { @JoinColumn(
+                    name = "pirate_id",
+                    nullable = false,
+                    updatable = false)
+            },
+            inverseJoinColumns = { @JoinColumn(
+                    name = "raid_id",
+                    nullable = false,
+                    updatable = false)
+            })
+
+    private List<Raid> raids;
 
 
     public Pirate(String firstName, String lastName, int age, Ship ship) {
